@@ -1,0 +1,25 @@
+<% layout("layouts/boilerplate") %>
+<h1>Edit campground</h1>
+<form action="/campgrounds" method="post">
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="campground[title]" autocomplete="off">
+    </div>
+    <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" class="form-control" id="location" name="campground[location]" autocomplete="off">
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="campground[description]" autocomplete="off"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input type="number" class="form-control" id="price" name="campground[price]" autocomplete="off">
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Image URL</label>
+        <input type="text" class="form-control" id="image" name="campground[image]" autocomplete="off">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Campground</button>
+</form>

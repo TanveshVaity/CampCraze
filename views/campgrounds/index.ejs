@@ -1,0 +1,29 @@
+<% layout("layouts/boilerplate") %>
+
+<style>
+    .card-img {
+        height: 200px; /* Adjust the height as needed */
+        object-fit: cover;
+    }
+</style>
+
+<h1>All Campgrounds</h1>
+
+<div class="container mt-5">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        <% for (let campground of campgrounds) { %>
+            <div class="col">
+                <div class="card">
+                    <img src="<%= campground.image %>" class="card-img-top card-img" alt="Campground Image">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= campground.title %></h5>
+                        <p class="card-text"><%= campground.description %></p>
+                        <p class="card-text"><strong>Location:</strong> <%= campground.location %></p>
+                        <p class="card-text"><strong>Price:</strong> <%= campground.price %></p>
+                        <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">View Location</a>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
