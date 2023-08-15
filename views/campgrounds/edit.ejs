@@ -40,21 +40,3 @@
     <button type="submit" class="btn btn-primary">Update Campground</button>
 </form>
 <a href="/campgrounds/<%= campground._id %>" class="mt-2 btn btn-secondary">Back To Campground</a>
-
-<script>
-    (function () {
-        'use strict';
-        const forms = document.querySelectorAll('.form-validation');
-        
-        forms.forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-    })();
-</script>
-

@@ -2,13 +2,15 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-const campGround = require("./models/campground");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const errorHandler = require("./utils/ErrorAsync");
 const ExpressError = require("./utils/ExpressError");
 const Joi = require("joi");
 const {campgroundSchema} = require("./schemas");
+const {reviewSchema} = require("./schemas");
+const campGround = require("./models/campground");
+const Review = require("./models/review");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -46,6 +48,17 @@ const campgroundValidation = (req,res,next) =>{
     }
 }
 
+const reviewValidation = (req,res,next)=>{
+    const {error} = reviewSchema.validate(req.body);
+    if(error){
+        const message = error.details.map(element => element.message).join(",");
+        throw new ExpressError(message , 400); 
+    }
+    else{
+        next();
+    }
+}
+
 app.get("/", (req, res) => {
     res.render("home");
 });
@@ -66,7 +79,7 @@ app.post("/campgrounds",campgroundValidation, errorHandler(async (req, res) => {
 }));
 
 app.get("/campgrounds/:id",errorHandler(async (req, res) => {
-    const campground = await campGround.findById(req.params.id);
+    const campground = await campGround.findById(req.params.id).populate("reviews");
     res.render("campgrounds/show", { campground });
 }));
 
@@ -85,14 +98,31 @@ app.delete("/campgrounds/:id", errorHandler(async(req,res)=>{
     res.redirect("/campgrounds");
 }));
 
-app.all("*", errorHandler(async(req,res,next)=>{
-    next(new ExpressError("Something Went Wrong", 500));
+app.post("/campgrounds/:id/reviews",reviewValidation, errorHandler(async(req,res)=>{
+    const campground = await campGround.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
 }));
 
-app.use((err,req,res,next)=>{
-    const {statusCode, message} = err;
-    res.render("error", {err}).status(statusCode);
-})
+app.delete("/campgrounds/:id/reviews/:reviewId", errorHandler(async(req,res)=>{
+    const {id, reviewId} = req.params;
+    await campGround.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`);
+}));
+
+app.all("*", (req, res, next) => {
+    next(new ExpressError("Page Not Found", 404));
+  });
+  
+  app.use((err, req, res, next) => {
+    const { statusCode = 500 } = err;
+    if (!err.message) err.message = "Oh No, Something Went Wrong!";
+    res.status(statusCode).render("error", { err });
+  });
 
 app.listen(port, () => {
     console.log("Server is running on port 5000");

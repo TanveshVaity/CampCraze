@@ -1,5 +1,5 @@
 <% layout("layouts/boilerplate") %>
-<h1>Edit campground</h1>
+<h1>Add campground</h1>
 <form action="/campgrounds" method="post" novalidate class="form-validation">
     <div class="mb-3">
         <label for="title" class="form-label">Title</label>
@@ -39,20 +39,4 @@
     <button type="submit" class="btn btn-primary">Add Campground</button>
 </form>
 
-<script>
-    (function () {
-        'use strict';
-        const forms = document.querySelectorAll('.form-validation');
-        
-        forms.forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                form.classList.add('was-validated');
-            }, false);
-        });
-    })();
-</script>
 
