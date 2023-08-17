@@ -62,11 +62,16 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-app.use((req,res,next)=>{
-    res.locals.success =  req.flash("success");
+app.use((req, res, next) => {
+    if (!["/login", "/", "/campgrounds/new"].includes(req.originalUrl)) {
+        req.session.returnTo = req.originalUrl;
+    }
+    req.session.returnTo = req.originalUrl;
+    res.locals.currentUser = req.user;
+    res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
-})
+});
 
 app.use("/campgrounds", campgroundsRoutes);
 app.use("/campgrounds/:id/reviews", reviewsRoutes);

@@ -1,17 +1,10 @@
 <% layout("layouts/boilerplate") %>
 <div class="container mt-5">
-    <h2 class="mb-4">Register</h2>
-    <form action="/register" method="POST" class="form-validation" novalidate>
+    <h2 class="mb-4">Login</h2>
+    <form action="/login" method="POST" class="form-validation" novalidate>
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" name="username" autocomplete="off" required>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" autocomplete="off" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -23,6 +16,6 @@
                 Looks good!
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="btn btn-primary">Login</button>
     </form>
 </div>

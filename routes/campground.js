@@ -4,6 +4,7 @@ const Campground = require("../models/campground");
 const errorHandler = require("../utils/ErrorAsync");
 const ExpressError = require("../utils/ExpressError");
 const {campgroundSchema} = require("../schemas");
+const {isLoggedIn} = require("../middlleware");
 
 
 const campgroundValidation = (req, res, next) => {
@@ -22,27 +23,28 @@ router.get("/", errorHandler(async (req, res) => {
     res.render("campgrounds/index", { campgrounds });
 }));
 
-router.get("/new", errorHandler(async (req, res) => {
+router.get("/new", isLoggedIn,errorHandler(async (req, res) => {
     res.render("campgrounds/new");
 }));
 
-router.post("/",campgroundValidation, errorHandler(async (req, res) => {
+router.post("/",campgroundValidation, isLoggedIn, errorHandler(async (req, res) => {
     const campground = new Campground(req.body.campground);
     await campground.save();
     req.flash('success', 'Successfully created a new campground!');
     res.redirect(`/campgrounds/${campground._id}`);
 }));
 
-router.get("/:id",errorHandler(async (req, res) => {
+router.get("/:id", errorHandler(async (req, res) => {
     const campground = await Campground.findById(req.params.id).populate("reviews");
-    if(!campground){
+    if (!campground) {
         req.flash("error", "Cannot find campground!");
-        res.redirect("/campgrounds");
+        return res.redirect("/campgrounds");
     }
     res.render("campgrounds/show", { campground });
 }));
 
-router.get("/:id/edit", errorHandler(async (req, res) => {
+
+router.get("/:id/edit", isLoggedIn, errorHandler(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     if(!campground){
         req.flash("error", "Cannot find campground!");
@@ -58,9 +60,14 @@ router.put("/:id", errorHandler(async (req, res) => {
 }));
 
 router.delete("/:id", errorHandler(async(req,res)=>{
-    await Campground.findOneAndDelete({"_id": req.params.id});
-    req.flash('success', 'Successfully deleted campground!');
-    res.redirect("/campgrounds");
+    try {
+        await Campground.findOneAndDelete({"_id": req.params.id});
+        req.flash('success', 'Successfully deleted campground!');
+        res.redirect("/campgrounds");
+    } catch (err) {
+        req.flash('error', 'Error deleting campground.');
+        res.redirect("/campgrounds");
+    }
 }));
 
 module.exports = router;
