@@ -22,7 +22,7 @@ connection.once("open", ()=>{
     console.log("MongoDB database connection established successfully");
 })
 
-let image = []; 
+let images = []; 
 axios.get(apiUrl)
   .then(response => {
     images = response.data.map(photo => photo.urls.regular);
@@ -41,7 +41,8 @@ const seed = async()=>{
         const randomNumber = Math.floor(Math.random()*1000);
         const randomPrice = Math.floor(Math.random()*100);
         const camp = new campGround({
-            location: `${cities[randomNumber].city}, ${cities[randomNumber].states}`,
+            author: "64dd5801ecb89dbf1ac4b9bc",
+            location: `${cities[randomNumber].city}, ${cities[randomNumber].state}`,
             title: `${sampleCamp(descriptors)}, ${sampleCamp(places)}`,
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tristique ligula vel nunc rhoncus",
             image: images[i % images.length],
