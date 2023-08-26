@@ -1,42 +1,67 @@
 <% layout("layouts/boilerplate") %>
 
-<h1>Edit Campground</h1>
-<form action="/campgrounds/<%= campground._id %>?_method=PUT" method="post" class="mt-3 form-validation" novalidate>
-    <div class="mb-3">
-        <label for="title" class="form-label">Title</label>
-        <input type="text" class="form-control" id="title" name="campground[title]" value="<%= campground.title %>" required>
-        <div class="valid-feedback">
-            Looks good!
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1>Edit Campground</h1>
+            <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="post" enctype="multipart/form-data" class="mt-3 form-validation" novalidate>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="campground[title]" value="<%= campground.title %>" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="location" name="campground[location]" value="<%= campground.location %>" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" class="form-control" id="price" name="campground[price]" value="<%= campground.price %>" required>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="campground[description]" rows="4" required><%= campground.description %></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="mb-3" >
+                    <label for="image" class="form-label">Upload Images</label>
+                    <div class="input-group ">
+                        <input type="file" id="image" name="campground[image]" class="form-control rounded" multiple accept="image/*" style="display: none;">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('image').click();">Browse</button>
+                        </div>
+                    </div>              
+                    <p id="image-names"></p>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Campground</button>
+            </form>
+            <a href="/campgrounds/<%= campground._id %>" class="mt-2 btn btn-secondary">Back To Campground</a>
         </div>
     </div>
-    <div class="mb-3">
-        <label for="location" class="form-label">Location</label>
-        <input type="text" class="form-control" id="location" name="campground[location]" value="<%= campground.location %>" required>
-        <div class="valid-feedback">
-            Looks good!
-        </div>
-    </div>
-    <div class="mb-3">
-        <label for="price" class="form-label">Price</label>
-        <input type="number" class="form-control" id="price" name="campground[price]" value="<%= campground.price %>" required>
-        <div class="valid-feedback">
-            Looks good!
-        </div>
-    </div>
-    <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea class="form-control" id="description" name="campground[description]" rows="4" required><%= campground.description %></textarea>
-        <div class="valid-feedback">
-            Looks good!
-        </div>
-    </div>
-    <div class="mb-3">
-        <label for="image" class="form-label">Image URL</label>
-        <input type="text" class="form-control" id="image" name="campground[image]" value="<%= campground.image %>" required>
-        <div class="valid-feedback">
-            Looks good!
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Update Campground</button>
-</form>
-<a href="/campgrounds/<%= campground._id %>" class="mt-2 btn btn-secondary">Back To Campground</a>
+</div>
+
+
+<script>
+    const imageInput = document.getElementById("image");
+    const imageNames = document.getElementById("image-names");
+
+    imageInput.addEventListener("change", function () {
+        if (imageInput.files.length > 0) {
+            const filenames = Array.from(imageInput.files).map(file => file.name).join(', ');
+            imageNames.textContent = `Selected files: ${filenames}`;
+        } else {
+            imageNames.textContent = "";
+        }
+    });
+</script>
+

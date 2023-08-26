@@ -18,7 +18,6 @@ module.exports.createNewCampground = errorHandler(async (req, res) => {
       }));    
     campground.author = req.user._id;
     await campground.save();
-    console.log(campground);
     req.flash('success', 'Successfully created a new campground!');
     res.redirect(`/campgrounds/${campground._id}`);
 });
@@ -48,7 +47,12 @@ module.exports.editCampgroundForm = errorHandler(async (req, res) => {
 
 module.exports.updatedCampground = errorHandler(async (req, res) => {
     const { id } = req.params;
-    const newCampground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    const newCampground = await Campground.findByIdAndUpdate(id, {
+        ...req.body.campground,
+    });
+    const imgs = req.files.map((f) => ({ url: f.path, filename: f.filename }));
+    newCampground.images.push(...imgs);
+    await newCampground.save();
     req.flash('success', 'Successfully updated campground!');
     res.redirect(`/campgrounds/${newCampground._id}`);
 });
