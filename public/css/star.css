@@ -56,6 +56,15 @@
   border: none;
 }
 
+.starability-basic {
+  display: flex;
+  align-items: center;
+}
+
+.starability-basic label {
+  margin-right: 0; 
+}
+
 .starability-basic > input {
   position: absolute;
   margin-right: -100%;

@@ -45,7 +45,11 @@ const seed = async()=>{
             location: `${cities[randomNumber].city}, ${cities[randomNumber].state}`,
             title: `${sampleCamp(descriptors)}, ${sampleCamp(places)}`,
             description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam tristique ligula vel nunc rhoncus",
-            image: images[i % images.length],
+            geometry: {
+                type: "Point",
+                coordinates: [-113.1331, 47.0202]
+            },
+            image:[{url: images[i % images.length]}],
             price: randomPrice
         })
         await camp.save();
