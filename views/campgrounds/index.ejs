@@ -1,15 +1,15 @@
 <% layout("layouts/boilerplate") %>
 
 <style>
-.card-img {
-  height: 200px;
-  object-fit: cover;
-}
+  .card-img {
+    height: 200px;
+    object-fit: cover;
+  }
 
-#map {
-  height: 500px;
-  width: 100%;
-}
+  #map {
+    height: 500px;
+    width: 100%;
+  }
 </style>
 
 <div id="map"></div>
@@ -17,40 +17,50 @@
 <h1>All Campgrounds</h1>
 
 <div class="container mt-5">
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
-    <% for (let campground of campgrounds) { %>
-    <div class="col">
-      <div class="card">
-        <% if(campground.images.length){ %>
-        <img
-          src="<%= campground.images[0].url %>"
-          class="card-img-top card-img"
-          alt="Campground Image"
-        />
-        <%} else{ %>
-        <img src="" class="card-img-top card-img" alt="Campground Image" />
-        <% }%>
-        <div class="card-body">
-          <h5 class="card-title"><%= campground.title %></h5>
-          <p class="card-text"><%= campground.description %></p>
-          <p class="card-text">
-            <strong>Location:</strong> <%= campground.location %>
-          </p>
-          <p class="card-text">
-            <strong>Price:</strong> <%= campground.price %>
-          </p>
-          <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary"
-            >View Location</a
-          >
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4" id="campgrounds-container">
+    <!-- Render the first 20 campgrounds here -->
+    <% for (let i = 0; i < Math.min(20, campgrounds.length); i++) { %>
+      <% let campground = campgrounds[i]; %> <!-- Define campground in this iteration -->
+      <div class="col">
+        <div class="card">
+          <% if(campground.images.length){ %>
+          <img
+            src="<%= campground.images[0].url %>"
+            class="card-img-top card-img"
+            alt="Campground Image"
+          />
+          <%} else{ %>
+          <img src="" class="card-img-top card-img" alt="Campground Image" />
+          <% } %>
+          <div class="card-body">
+            <h5 class="card-title"><%= campground.title %></h5>
+            <p class="card-text"><%= campground.description %></p>
+            <p class="card-text">
+              <strong>Location:</strong> <%= campground.location %>
+            </p>
+            <p class="card-text">
+              <strong>Price:</strong> <%= campground.price %>
+            </p>
+            <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary"
+              >View Location</a
+            >
+          </div>
         </div>
       </div>
-    </div>
     <% } %>
   </div>
+
+  <!-- Add a "See More" button -->
+  <div id="see-more-button-container" class="d-flex justify-content-center mt-4">
+    <button id="see-more-button" class="btn btn-primary">See More</button>
+  </div>  
 </div>
+
 
 <script>
   const mapToken = "<%- process.env.MAPBOX_TOKEN%>";
-  const campgrounds = {features: <%- JSON.stringify(campgrounds) %>};
+  const campgrounds = { features: <%- JSON.stringify(campgrounds) %> };
+  window.campgroundsData = <%- JSON.stringify(campgrounds) %>;
 </script>
 <script src="/js/clusterMap.js"></script>
+<script src="/js/moreCampgrounds.js"></script>
