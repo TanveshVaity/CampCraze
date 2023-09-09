@@ -4,12 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
   
     let displayedCampgrounds = 20;
   
-    // Function to render campgrounds
     function renderCampgrounds(campgrounds) {
-      // Clear the campgrounds container
       campgroundsContainer.innerHTML = "";
   
-      // Render the next batch of campgrounds
       for (let i = 0; i < Math.min(displayedCampgrounds, campgrounds.length); i++) {
         const campground = campgrounds[i];
         const campgroundHTML = `
@@ -35,21 +32,15 @@ document.addEventListener("DOMContentLoaded", () => {
         campgroundsContainer.appendChild(newCampgroundElement);
       }
   
-      // If all campgrounds have been displayed, hide the "See More" button
       if (displayedCampgrounds >= campgrounds.length) {
         seeMoreButton.style.display = "none";
       }
     }
   
-    // Initial rendering
     renderCampgrounds(window.campgroundsData);
   
-    // Event listener for "See More" button
     seeMoreButton.addEventListener("click", () => {
-      // Increase the number of campgrounds to display
       displayedCampgrounds += 10;
-  
-      // Re-render campgrounds
       renderCampgrounds(window.campgroundsData);
     });
   });
