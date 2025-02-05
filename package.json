@@ -7,7 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "run": "nodemon server.js",
-    "build": "node build --output public"
+    "start:dev": "node ./dev-build/main.js",
+    "start:prod": "node ./prod-build/main.js",
+    "start:prod:optimization": "node ./prod-build-optimization/main.js",
+    "build:dev": "webpack --config webpack.dev.js --mode development",
+    "build:prod": "webpack --config webpack.prod.js --mode production"
   },
   "keywords": [],
   "author": "",
@@ -38,6 +42,11 @@
     "sanitize-html": "^2.11.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "@babel/core": "^7.26.7",
+    "babel-loader": "^9.2.1",
+    "nodemon": "^3.0.1",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
   }
 }
